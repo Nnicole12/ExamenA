@@ -1,11 +1,11 @@
 services:
   - type: web
     name: purapasion-backend
-    env: docker
+    runtime: docker
     plan: free
     region: ohio
     dockerContext: Backend
-    dockerfile: Dockerfile
+    dockerfilePath: Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         sync: false
