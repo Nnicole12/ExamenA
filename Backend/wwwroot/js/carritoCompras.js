@@ -53,7 +53,7 @@ export async function mostrarCarrito() {
             itemDiv.className = 'product-card';
             itemDiv.innerHTML = `
                     <div class="product-image-container">
-                        <img src="${producto.imagenUrl || './Frontend/assets/img/default-product.jpg'}" 
+                        <img src="${producto.imagenUrl || './assets/img/default-product.jpg'}" 
                             alt="${producto.nombre}"
                             class="product-image" />
                     </div>

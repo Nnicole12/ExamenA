@@ -7,15 +7,15 @@ import { cargarProductos } from './cargueInventario.js';
 function mostrarProductosRelacionados(productos, contenedorId) {
     const contenedor = document.getElementById(contenedorId);
     if (!contenedor) return;
-    
+
     contenedor.innerHTML = '';
-    
+
     productos.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
             <div class="product-image-container">
-                <img src="${prod.imagenUrl || './Frontend/assets/img/default-product.jpg'}" 
+                <img src="${prod.imagenUrl || './assets/img/default-product.jpg'}" 
                      alt="${prod.nombre}" 
                      class="product-image" />
             </div>
@@ -57,7 +57,7 @@ async function mostrarDetalleProducto() {
 
         // Buscar el producto por ID
         const producto = productosGlobal.find(p => p.id == productoId);
-        
+
         if (!producto) {
             const titleElement = document.getElementById('productTitle');
             if (titleElement) {
@@ -69,26 +69,26 @@ async function mostrarDetalleProducto() {
         // Actualizar elementos del DOM si existen
         const titleElement = document.getElementById('productTitle');
         if (titleElement) titleElement.textContent = producto.nombre;
-        
+
         const priceElement = document.getElementById('productPrice');
         if (priceElement) priceElement.textContent = `$${producto.precio.toLocaleString()}`;
-        
+
         const descriptionElement = document.getElementById('productDescription');
         if (descriptionElement) {
             descriptionElement.textContent = producto.descripcion || 'Sin descripción disponible';
         }
-        
+
         const stockElement = document.getElementById('productStock');
         if (stockElement) {
-            stockElement.textContent = producto.stock > 0 
-                ? `Disponible (${producto.stock} unidades)` 
+            stockElement.textContent = producto.stock > 0
+                ? `Disponible (${producto.stock} unidades)`
                 : 'Agotado';
         }
 
         // Imagen principal
         const imgElement = document.getElementById('productImage');
         if (imgElement) {
-            imgElement.src = producto.imagenUrl || './Frontend/assets/img/default-product.jpg';
+            imgElement.src = producto.imagenUrl || './assets/img/default-product.jpg';
             imgElement.alt = producto.nombre;
         }
 
@@ -96,10 +96,10 @@ async function mostrarDetalleProducto() {
         const thumbnailsContainer = document.getElementById('thumbnails');
         if (thumbnailsContainer) {
             if (producto.imagenesAdicionales && producto.imagenesAdicionales.length > 0) {
-                const imagenes = Array.isArray(producto.imagenesAdicionales) 
-                    ? producto.imagenesAdicionales 
+                const imagenes = Array.isArray(producto.imagenesAdicionales)
+                    ? producto.imagenesAdicionales
                     : producto.imagenesAdicionales.split(',');
-                    
+
                 thumbnailsContainer.innerHTML = imagenes.map(img => `
                     <img src="${img.trim()}" 
                          alt="Miniatura" 
@@ -122,11 +122,11 @@ async function mostrarDetalleProducto() {
         configurarCarritoDetalle(producto.id);
 
         // Productos relacionados
-        const relacionados = productosGlobal.filter(p => 
-            p.categoria === producto.categoria && 
+        const relacionados = productosGlobal.filter(p =>
+            p.categoria === producto.categoria &&
             p.id !== producto.id
         ).slice(0, 4);
-        
+
         mostrarProductosRelacionados(relacionados, 'relatedProducts');
 
         // Actualizar contador del carrito
@@ -145,7 +145,7 @@ async function mostrarDetalleProducto() {
 function configurarCarritoDetalle(productoId) {
     const productActions = document.querySelector('.product-actions');
     if (!productActions) return;
-    
+
     // Crear contenedor de cantidad si no existe
     let quantityContainer = document.querySelector('.quantity-selector');
     if (!quantityContainer) {
@@ -157,7 +157,7 @@ function configurarCarritoDetalle(productoId) {
                 <input type="number" id="productQuantity" value="1" min="1" max="30">
             </div>
         `;
-        
+
         // Insertar antes de los botones de acción
         productActions.parentNode.insertBefore(quantityContainer, productActions);
     }
@@ -201,7 +201,7 @@ function configurarCarritoDetalle(productoId) {
     // Event listener para botón de agregar al carrito
     const newAddToCartBtn = addToCartBtn.cloneNode(true);
     addToCartBtn.parentNode.replaceChild(newAddToCartBtn, addToCartBtn);
-    
+
     newAddToCartBtn.addEventListener('click', () => {
         const quantity = parseInt(quantityInput?.value) || 1;
         agregarAlCarrito(productoId, quantity);
@@ -213,7 +213,7 @@ function cambiarImagenPrincipal(nuevaImagenUrl) {
     const imgPrincipal = document.getElementById('productImage');
     if (imgPrincipal) {
         imgPrincipal.src = nuevaImagenUrl;
-        
+
         // Destacar la miniatura seleccionada
         document.querySelectorAll('.thumbnail').forEach(thumb => {
             thumb.classList.remove('active');
@@ -229,7 +229,7 @@ async function inicializar() {
     try {
         // Actualizar contador del carrito primero
         actualizarContadorGlobal();
-        
+
         // Luego cargar el detalle del producto
         await mostrarDetalleProducto();
     } catch (error) {

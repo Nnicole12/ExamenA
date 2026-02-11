@@ -70,7 +70,7 @@ export function mostrarProductos(productos) {
     contenedor.innerHTML = productos.map(prod => `
         <div class="product-card" data-product-id="${prod.id}">
             <div class="product-image-container">
-                <img src="${prod.imagenUrl || './Frontend/assets/img/default-product.jpg'}" 
+                <img src="${prod.imagenUrl || './assets/img/default-product.jpg'}" 
                      alt="${prod.nombre}" 
                      class="product-image">
             </div>
