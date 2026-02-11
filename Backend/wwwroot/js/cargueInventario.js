@@ -3,7 +3,7 @@ import { agregarAlCarrito } from './carritoCompras.js';
 import { productosGlobal } from './estadoGlobal.js';
 
 // 1. Configuración de la API
-const API_URL = 'https://localhost:7272/api';
+const API_URL = '/api';
 
 // 2. Función principal para cargar productos
 export async function cargarProductos() {
@@ -11,10 +11,10 @@ export async function cargarProductos() {
         // 2.1. Hacer la petición a tu endpoint .NET
         const response = await fetch(`${API_URL}/Productos`);
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-        
+
         // 2.2. Procesar la respuesta
         const productos = await response.json();
-        
+
         // 2.3. Actualizar el array global SIN reasignar la variable
         productosGlobal.length = 0;
         productosGlobal.push(...productos);
@@ -22,28 +22,28 @@ export async function cargarProductos() {
         // 2.4. Actualizar la UI SOLO si los elementos existen
         const contenedorCatalogo = document.getElementById('nuestroCatalogo');
         const filtroCategoria = document.getElementById('filtroCategoria');
-        
+
         // Solo ejecutar funciones de UI si estamos en la página principal
         if (contenedorCatalogo) {
             mostrarProductos(productos);
         }
-        
+
         if (filtroCategoria) {
             llenarOpcionesCategoria(productos);
             aplicarFiltros();
         }
-        
+
         return productos; // Retornar productos para uso en otros módulos
-        
+
     } catch (error) {
         console.error('Error al cargar productos:', error);
-        
+
         // Solo mostrar error si el contenedor existe
         const contenedorCatalogo = document.getElementById('nuestroCatalogo');
         if (contenedorCatalogo) {
             mostrarError();
         }
-        
+
         return []; // Retornar array vacío en caso de error
     }
 }
@@ -51,10 +51,10 @@ export async function cargarProductos() {
 // 3. Función para mostrar productos en el HTML
 export function mostrarProductos(productos) {
     const contenedor = document.getElementById('nuestroCatalogo');
-    
+
     // Verificar que el contenedor existe
     if (!contenedor) return;
-    
+
     // 3.1. Manejo cuando no hay productos
     if (!productos || productos.length === 0) {
         contenedor.innerHTML = `
@@ -100,16 +100,16 @@ export function mostrarProductos(productos) {
 // 4. Función para llenar el dropdown de categorías
 function llenarOpcionesCategoria(productos) {
     const select = document.getElementById('filtroCategoria');
-    
+
     // Verificar que el select existe
     if (!select) return;
-    
+
     // 4.1. Opción por defecto
     select.innerHTML = '<option value="todos">Todas las categorías</option>';
-    
+
     // 4.2. Obtener categorías únicas
     const categoriasUnicas = [...new Set(productos.map(p => p.categoria))].sort();
-    
+
     // 4.3. Añadir opciones al select
     categoriasUnicas.forEach(categoria => {
         select.innerHTML += `<option value="${categoria}">${categoria}</option>`;
@@ -123,10 +123,10 @@ function agregarEventListenersCarrito() {
             e.preventDefault();
             const rawId = e.currentTarget.getAttribute('data-product-id');
             console.log('ID crudo:', rawId, 'Tipo:', typeof rawId);
-            
+
             const productId = e.currentTarget.getAttribute('data-product-id');
             console.log('ID procesado:', productId, 'Tipo:', typeof productId);
-            
+
             agregarAlCarrito(productId);
         });
     });
@@ -135,10 +135,10 @@ function agregarEventListenersCarrito() {
 // 6. Función para mostrar errores
 function mostrarError() {
     const contenedor = document.getElementById('nuestroCatalogo');
-    
+
     // Verificar que el contenedor existe
     if (!contenedor) return;
-    
+
     contenedor.innerHTML = `
         <div class="error-message">
             <i class="fas fa-exclamation-triangle"></i>

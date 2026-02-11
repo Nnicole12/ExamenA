@@ -11,8 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.Load();
 
 // --- Configuración de Servicios ---
-// 1. Contexto de la base de datos (PostgreSQL con Supabase)
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// 1. Contexto de la base de datos (PostgreSQL)
+// Se busca en Configuration (que incluye variables de entorno en producción)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                    ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -52,6 +54,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // --- Construye la App ---
 var app = builder.Build();
+
+// Aplicar migraciones automáticamente en el inicio (útil para Render)
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.Migrate();
+        Console.WriteLine("Migraciones aplicadas con éxito.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al aplicar migraciones: {ex.Message}");
+    }
+}
 
 //  HABILITAR ARCHIVOS ESTÁTICOS
 app.UseDefaultFiles();   // Busca index.html automáticamente

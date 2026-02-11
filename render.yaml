@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: purapasion-backend
+    env: docker
+    plan: free
+    region: ohio
+    dockerContext: Backend
+    dockerFilePath: Dockerfile
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
