@@ -5,7 +5,7 @@ services:
     plan: free
     region: ohio
     dockerContext: Backend
-    dockerfilePath: Dockerfile
+    dockerfilePath: Backend/Dockerfile
     envVars:
       - key: ConnectionStrings__DefaultConnection
         sync: false
