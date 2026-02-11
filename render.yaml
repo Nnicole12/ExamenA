@@ -4,8 +4,7 @@ services:
     runtime: docker
     plan: free
     region: ohio
-    dockerContext: Backend
-    dockerfilePath: Backend/Dockerfile
+    # No dockerContext or dockerfilePath needed when Dockerfile is at the root
     envVars:
       - key: ConnectionStrings__DefaultConnection
         sync: false
